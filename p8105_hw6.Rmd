@@ -125,3 +125,17 @@ I guess the mother’s weight at delivery is positively associated with baby's b
 model_fit = lm(bwt ~ delwt, data = baby_df)
 ```
 
+
+
+residuals v.s fitted values plot
+
+```{r}
+baby_df %>% 
+  add_predictions(model_fit) %>% 
+  add_residuals(model_fit) %>% 
+  ggplot(aes(x = pred, y = resid)) + 
+  geom_point()
+
+```
+
+
