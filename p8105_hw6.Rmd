@@ -103,3 +103,25 @@ models_results_df %>%
 
 
 
+
+### Problem 2
+
+Load and clean data.
+
+```{r}
+baby_df = 
+  read_csv("./data/birthweight.csv") %>% 
+  mutate(
+    babysex = as.factor(babysex),
+    frace = as.factor(frace),
+    mrace = as.factor(mrace)
+  )
+```
+
+
+I guess the mother’s weight at delivery is positively associated with baby's birth weight. Fit a simple linear regression.
+
+```{r}
+model_fit = lm(bwt ~ delwt, data = baby_df)
+```
+
