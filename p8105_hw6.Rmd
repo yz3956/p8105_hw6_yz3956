@@ -215,3 +215,59 @@ bootstrap_results =
 
 ```
 
+
+distribution of r_squared
+
+```{r}
+bootstrap_results %>% 
+  unnest(summary) %>% 
+   ggplot(aes(x = r.squared)) + geom_density()
+  
+```
+
+The distribution of r_squared is a little negatively skewed.
+
+
+distribution of log
+
+```{r}
+log_result = 
+ bootstrap_results %>% 
+  unnest(results) %>% 
+  select(.id, term, estimate) %>% 
+  pivot_wider(
+    names_from = term,
+    values_from = estimate
+  ) %>% 
+  rename(Intercept = "(Intercept)") %>% 
+  mutate(log = log(Intercept*tmin))
+
+log_result %>% 
+  ggplot(aes(x = log)) + geom_density()
+```
+
+The distribution of log of estimated beta0 * estimated beta1 looks normal.
+
+
+
+95% confidence interval
+
+```{r}
+r_squared_CI = 
+  bootstrap_results %>% 
+  unnest(summary) %>% 
+  summarize(
+    ci_lower = quantile(r.squared, 0.025), 
+    ci_upper = quantile(r.squared, 0.975)) %>% 
+  mutate(term = "r_squared")
+  
+log_CI = 
+  log_result %>% 
+  summarize(
+    ci_lower = quantile(log, 0.025), 
+    ci_upper = quantile(log, 0.975)) %>% 
+  mutate(term = "log(beta0*beta1)")
+
+rbind(r_squared_CI, log_CI) %>% relocate(term)
+```
+
