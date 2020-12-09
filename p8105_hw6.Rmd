@@ -268,6 +268,7 @@ log_CI =
     ci_upper = quantile(log, 0.975)) %>% 
   mutate(term = "log(beta0*beta1)")
 
-rbind(r_squared_CI, log_CI) %>% relocate(term)
+rbind(r_squared_CI, log_CI) %>% relocate(term) %>% 
+  knitr::kable(digits = 3)
 ```
 
